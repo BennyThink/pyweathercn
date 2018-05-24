@@ -96,13 +96,11 @@ def make_json(city):
 
     city_code = convert_city(city)
     if city_code is None:
-        return {"data": {"city": city, "aqi": 0, "tip": "", "temp": 0,
-                         "forecast": []}, "status": 1, "desc": CODE[1]}
+        return {"status": 1, "desc": CODE[1]}
 
     response = requests.get(url % city_code)
     if response.status_code != 200:
-        return {"data": {"city": city, "aqi": 0, "tip": "", "temp": 0,
-                         "forecast": []}, "status": 2, "desc": CODE[2]}
+        return {"status": 2, "desc": CODE[2]}
 
     response.encoding = 'utf-8'
     soup = BeautifulSoup(response.text, 'html.parser')

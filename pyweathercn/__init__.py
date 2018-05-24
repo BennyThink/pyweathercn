@@ -11,11 +11,23 @@ import pyweathercn.helper
 
 
 class Weather:
+    """
+    Weather broadcast class.
+    """
+
     def __init__(self, city_name):
 
         self.data = pyweathercn.helper.make_json(city_name)
 
+    def __del__(self):
+        del self.data
+
     def today(self, raw=False):
+        """
+        return today weather
+        :param raw: return raw json
+        :return: json or string.
+        """
         return self.__return_result__(raw, 0)
 
     def tomorrow(self, raw=False):
@@ -68,5 +80,6 @@ class Weather:
             s = s + dic[i]
         return s
 
-    def __del__(self):
-        del self.data
+
+def server(port=8888, host="127.0.0.1", **kwargs):
+    pyweathercn.helper.run_server(port, host, **kwargs)

@@ -7,20 +7,56 @@
 
 __author__ = 'Benny <benny@bennythink.com>'
 
-from flask import Flask
+import tornado.ioloop
+import tornado.web
+import json
 from pyweathercn.craw import make_json
 
-app = Flask(__name__)
+
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.set_header("Content-Type", "application/json")
+        self.write(self.process(self))
+
+    def post(self):
+        self.set_header("Content-Type", "application/json")
+        self.write(self.process(self))
+
+    @staticmethod
+    def process(self):
+        try:
+            city = self.get_argument('city')
+            day = self.get_argument('day')
+        except Exception:
+            city = day = None
+
+        if city is None:
+            return make_json(0)
+        elif day:
+            data = make_json(city)
+            try:
+                sp = data['data']['forecast'][int(day)]
+            except IndexError:
+                sp = {"status": 3, "desc": 'day out of range'}
+            return json.dumps(sp)
+        else:
+            return json.dumps(make_json(city))
 
 
-def today(city):
-    make_json(city)
+def make_app():
+    return tornado.web.Application([
+        (r"/weather", MainHandler),
+    ])
 
 
-@app.route("/")
-def hello():
-    return "Hello World!"
+def run_server(port, host, **kwargs):
+    app = make_app()
+    app.listen(port, host, **kwargs)
+    print('%s running on %s' % (host, port))
+    tornado.ioloop.IOLoop.current().start()
 
 
-if __name__ == '__main__':
-    app.run()
+if __name__ == "__main__":
+    run_server('8888', 'api.serversan.date', ssl_options={
+        "certfile": "fullchain.pem",
+        "keyfile": "privkey.pem"})

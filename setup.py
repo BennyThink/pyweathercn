@@ -6,10 +6,8 @@
 
 import io
 import os
-import sys
-from shutil import rmtree
 
-from setuptools import find_packages, setup, Command
+from distutils.core import setup
 
 # Package meta-data.
 NAME = 'pyweathercn'
@@ -22,7 +20,7 @@ VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    "flask",
+    "tornado",
     "beautifulsoup4",
     "requests"
 ]
@@ -58,15 +56,8 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
-    packages=find_packages(exclude=('tests',)),
-    # If your package is a single module, use this instead of 'packages':
-    # py_modules=['mypackage'],
-
-    # entry_points={
-    #     'console_scripts': ['mycli=mymodule:cli'],
-    # },
+    packages=['pyweathercn'],
     install_requires=REQUIRED,
-    include_package_data=True,
     license='MIT',
     classifiers=[
         # Trove classifiers
