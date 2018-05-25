@@ -1,0 +1,9 @@
+language: python
+python:
+  - "3.5"
+  - "3.6"
+install:
+  - pip install tornado beautifulsoup4 requests
+script:
+  - python tests/test_api.py
+  - python tests/test_weather.py
