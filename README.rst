@@ -1,12 +1,18 @@
 pyweathercn:
 ============
+.. image:: https://travis-ci.org/BennyThink/pyweathercn.svg?branch=master
+    :target: https://travis-ci.org/BennyThink/pyweathercn
+An API for www.weather.com.cn
 
-A wrapper for www.weather.com.cn
+Installation
+------------
 
-Usage
+To install this package, simply use pip: ``$ pip3 install pyweathercn``
+
+Example
 -----
 
-Python Console usage:
+Python Console example:
 
 .. code:: python
 
@@ -25,7 +31,7 @@ Python Console usage:
        >>> w.forecast(False,5)
        '北京：28日（周一）多云25℃/15℃东北风 <3级'
 
-Run as a server
+Run as a server:
 
 .. code:: python
 
@@ -34,12 +40,16 @@ Run as a server
        pyweathercn.server()
        # running on http://0.0.0.0:3333
        pyweathercn.server(3333, '0.0.0.0')
-       # support ssl https://www.example.com:8888
+       # support ssl: https://www.example.com:8888
        pyweathercn.server('8888', 'www.example.com', ssl_options={
            "certfile": "fullchain.pem",
            "keyfile": "privkey.pem"})
 
-Installation
-------------
+TODO
+-----
+- add more cities.
 
-To install this package, simply use pip: ``$ pip3 install pyweathercn``
+
+Example
+-----
+MIT .
