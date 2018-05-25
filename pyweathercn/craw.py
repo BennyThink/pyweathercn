@@ -9,12 +9,13 @@ __author__ = 'Benny <benny@bennythink.com>'
 
 import json
 import time
+
 import requests
 from bs4 import BeautifulSoup
 
 from pyweathercn.city import CITY
 
-CODE = {0: 'success', 1: 'city not found', 2: 'craw denied', 3: 'permission denied'}
+CODE = {0: 'success', 1: 'city not found', 2: 'craw denied', 3: 'permission denied', 4: 'city param error'}
 
 
 def today_tip(soup):
@@ -35,6 +36,11 @@ def js_hour_aqi(soup):
 
 
 def js_hour_temp(soup):
+    """
+    get hour temperature extract from JavaScript object and dumps it to dict.
+    :param soup: beautiful soup object
+    :return:temperature
+    """
     script = soup.find_all('script')
     js = script[2].string
     od = json.loads(js[js.index('=') + 1:])
@@ -92,9 +98,17 @@ def convert_city(name):
 
 
 def make_json(city):
+    """
+    make final request json
+    :param city: city key
+    :return: json result
+    """
+    if city == 4:
+        return {"status": 4, "desc": CODE[4]}
     url = 'http://www.weather.com.cn/weather/%s.shtml'
 
     city_code = convert_city(city)
+    # city not found
     if city_code is None:
         return {"status": 1, "desc": CODE[1]}
 

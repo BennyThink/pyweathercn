@@ -7,9 +7,11 @@
 
 __author__ = 'Benny <benny@bennythink.com>'
 
+import json
+
 import tornado.ioloop
 import tornado.web
-import json
+
 from pyweathercn.craw import make_json
 
 
@@ -24,14 +26,15 @@ class MainHandler(tornado.web.RequestHandler):
 
     @staticmethod
     def process(self):
-        try:
-            city = self.get_argument('city')
-            day = self.get_argument('day')
-        except Exception:
-            city = day = None
+        # get parameter
 
+        city = self.get_argument('city', None)
+        day = self.get_argument('day', None)
+
+        # mandatory param missing
         if city is None:
-            return make_json(0)
+            return make_json(4)
+        # day, return specified day.
         elif day:
             data = make_json(city)
             try:
@@ -39,6 +42,7 @@ class MainHandler(tornado.web.RequestHandler):
             except IndexError:
                 sp = {"status": 3, "desc": 'day out of range'}
             return json.dumps(sp)
+        # return whole json.
         else:
             return json.dumps(make_json(city))
 
