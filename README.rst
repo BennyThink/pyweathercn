@@ -2,6 +2,7 @@ pyweathercn:
 ============
 .. image:: https://travis-ci.org/BennyThink/pyweathercn.svg?branch=master
     :target: https://travis-ci.org/BennyThink/pyweathercn
+
 An API for www.weather.com.cn
 
 Installation
@@ -10,7 +11,7 @@ Installation
 To install this package, simply use pip: ``$ pip3 install pyweathercn``
 
 Example
------
+--------
 
 Python Console example:
 
@@ -50,6 +51,6 @@ TODO
 - add more cities.
 
 
-Example
------
-MIT .
+License
+-------
+MIT
