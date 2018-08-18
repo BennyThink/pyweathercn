@@ -104,23 +104,23 @@ def make_json(city):
     :return: json result
     """
     if city == 4:
-        return {"status": 4, "desc": CODE[4]}
+        return {"status": 4, "message": CODE[4]}
     url = 'http://www.weather.com.cn/weather/%s.shtml'
 
     city_code = convert_city(city)
     # city not found
     if city_code is None:
-        return {"status": 1, "desc": CODE[1]}
+        return {"status": 1, "message": CODE[1]}
 
     response = requests.get(url % city_code)
     if response.status_code != 200:
-        return {"status": 2, "desc": CODE[2]}
+        return {"status": 2, "message": CODE[2]}
 
     response.encoding = 'utf-8'
     soup = BeautifulSoup(response.text, 'html.parser')
 
     sample = {"data": {"city": city, "aqi": js_hour_aqi(soup), "tip": today_tip(soup), "temp": js_hour_temp(soup),
-                       "forecast": seven_day(soup)}, "status": 0, "desc": CODE[0]}
+                       "forecast": seven_day(soup)}, "status": 0, "message": CODE[0]}
 
     return sample
 

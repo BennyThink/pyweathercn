@@ -40,7 +40,7 @@ class MainHandler(tornado.web.RequestHandler):
             try:
                 sp = data['data']['forecast'][int(day)]
             except IndexError:
-                sp = {"status": 3, "desc": 'day out of range'}
+                sp = {"status": 3, "message": 'day out of range'}
             return json.dumps(sp)
         # return whole json.
         else:
