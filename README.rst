@@ -39,9 +39,9 @@ Run as a server:
 
        import pyweather
        # running on http://127.0.0.1:8888
-       pyweathercn.server()
+       pyweathercn.server(host='127.0.0.1')
        # running on http://0.0.0.0:3333
-       pyweathercn.server(3333, '0.0.0.0')
+       pyweathercn.server(3333)
        # support ssl: https://www.example.com:8888
        pyweathercn.server('8888', 'www.example.com', ssl_options={
            "certfile": "fullchain.pem",

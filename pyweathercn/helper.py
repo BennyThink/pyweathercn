@@ -107,7 +107,7 @@ class RunServer:
 
     @staticmethod
     def run_server(port=8888, host='0.0.0.0', **kwargs):
-        tornado_server = httpserver.HTTPServer(RunServer.application)
+        tornado_server = httpserver.HTTPServer(RunServer.application, **kwargs)
         tornado_server.bind(port, host)
 
         if uname()[0] == 'Windows':
