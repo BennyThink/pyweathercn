@@ -103,7 +103,7 @@ class Weather:
         return s
 
 
-def server(port=8888, host="127.0.0.1", **kwargs):
+def server(port=8888, host="0.0.0.0", **kwargs):
     """
     run RESTAPI server.
     :param port: the port to listen on. Default is 8888

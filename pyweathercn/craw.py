@@ -3,7 +3,7 @@
 
 # pyweathercn - craw.py
 # 2018/5/22 16:31
-#
+# get forecast from weather.com.cn
 
 __author__ = 'Benny <benny@bennythink.com>'
 
