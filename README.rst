@@ -3,12 +3,13 @@ pyweathercn:
 .. image:: https://travis-ci.org/BennyThink/pyweathercn.svg?branch=master
     :target: https://travis-ci.org/BennyThink/pyweathercn
 
-An API for www.weather.com.cn
+An weather forecast library from www.weather.com.cn
 
 Installation
 ------------
 
-To install this package, simply use pip: ``$ pip3 install pyweathercn``
+To install this package, simply use pip: ``$ pip3 install pyweathercn``.
+There's no plan to support Python 2.
 
 Example
 --------
@@ -48,7 +49,7 @@ Run as a server:
 
 TODO
 -----
-- add more cities.
+- API Key authentication
 
 
 License

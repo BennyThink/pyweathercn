@@ -15,6 +15,7 @@ from concurrent.futures import ThreadPoolExecutor
 from tornado import web, ioloop, httpserver, gen
 from tornado.concurrent import run_on_executor
 from pyweathercn.craw import make_json
+from pyweathercn.utils import require_api
 
 BANNER = r'''
 
@@ -33,7 +34,9 @@ class BaseHandler(web.RequestHandler):
         pass
 
 
-class MainHandler(BaseHandler):
+class IndexHandler(BaseHandler):
+
+    @require_api
     def get(self):
         help_msg = '''Welcome to pyweathercn!
         There are two ways to interact with this RESTAPI.
@@ -98,25 +101,28 @@ def get_host_ip():
     return ip
 
 
-def run_server(port=8888, host='0.0.0.0', **kwargs):
-    handlers = [(r'/weather', WeatherHandler), (r'/', MainHandler)]
+class RunServer:
+    handlers = [(r'/weather', WeatherHandler), (r'/', IndexHandler)]
     application = web.Application(handlers)
-    tornado_server = httpserver.HTTPServer(application)
-    tornado_server.bind(port, host)
 
-    if uname()[0] == 'Windows':
-        tornado_server.start()
-    else:
-        tornado_server.start(None)
+    @staticmethod
+    def run_server(port=8888, host='0.0.0.0', **kwargs):
+        tornado_server = httpserver.HTTPServer(RunServer.application)
+        tornado_server.bind(port, host)
 
-    try:
-        print(BANNER)
-        print('Server is running on http://%s:%s' % (get_host_ip(), port))
-        ioloop.IOLoop.instance().current().start()
-    except KeyboardInterrupt:
-        ioloop.IOLoop.instance().stop()
-        print('"Ctrl+C" received, exiting.\n')
+        if uname()[0] == 'Windows':
+            tornado_server.start()
+        else:
+            tornado_server.start(None)
+
+        try:
+            print(BANNER)
+            print('Server is running on http://%s:%s' % (get_host_ip(), port))
+            ioloop.IOLoop.instance().current().start()
+        except KeyboardInterrupt:
+            ioloop.IOLoop.instance().stop()
+            print('"Ctrl+C" received, exiting.\n')
 
 
 if __name__ == "__main__":
-    run_server()
+    RunServer.run_server()

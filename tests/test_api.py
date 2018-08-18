@@ -16,18 +16,18 @@ from tornado.escape import url_escape
 
 sys.path.append('.')
 from tests.deco import logger
-from pyweathercn.helper import make_app
+from pyweathercn.helper import RunServer
 
 
 class TestAPI(AsyncHTTPTestCase):
     def get_app(self):
-        return make_app()
+        return RunServer.application
 
     @logger
     def test_get(self):
         case = ['/weather?city=%s' % url_escape('呗'), '/weather?c=%s' % url_escape('北京'),
                 '/weather?city=%s' % url_escape('北京'), '/weather?city=%s&day=2' % url_escape('北京')]
-        result = [{'status': 1, 'desc': 'city not found'}, {'status': 4, 'desc': 'city param error'}]
+        result = [{'status': 1, 'message': 'city not found'}, {'status': 4, 'message': 'city param error'}]
 
         code = json.loads(self.fetch(case[0]).body.decode('utf-8'))
         assert result[0] == code
@@ -45,7 +45,7 @@ class TestAPI(AsyncHTTPTestCase):
     def test_post(self):
         case = ['city=%s' % url_escape('无'), 'c=%s' % url_escape('北京'),
                 'city=%s' % url_escape('北京'), 'city=%s&day=2' % url_escape('北京')]
-        result = [{'status': 1, 'desc': 'city not found'}, {'status': 4, 'desc': 'city param error'}]
+        result = [{'status': 1, 'message': 'city not found'}, {'status': 4, 'message': 'city param error'}]
 
         code = json.loads(self.fetch('/weather', method='POST', body=case[0]).body.decode('utf-8'))
         assert result[0] == code

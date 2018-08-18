@@ -63,7 +63,7 @@ class Weather:
         elif self.data['status'] == 0:
             return self.data['data']['city'] + '：' + self.__make_str__(self.data['data']['forecast'][day])
         else:
-            return self.data['desc']
+            return self.data['message']
 
     def __make__(self, raw, _type, text):
         """
@@ -79,7 +79,7 @@ class Weather:
         elif self.data['status'] == 0:
             return self.data['data']['city'] + text + "：" + self.data['data'][_type]
         else:
-            return self.data['desc']
+            return self.data['message']
 
     def __return_result__(self, raw, index):
         """
@@ -93,7 +93,7 @@ class Weather:
         elif self.data['status'] == 0:
             return self.data['data']['city'] + '：' + self.__make_str__(self.data['data']['forecast'][index])
         else:
-            return self.data['desc']
+            return self.data['message']
 
     @staticmethod
     def __make_str__(dic):
@@ -115,4 +115,4 @@ def server(port=8888, host="0.0.0.0", **kwargs):
     ```
     :return: None
     """
-    pyweathercn.helper.run_server(port, host, **kwargs)
+    pyweathercn.helper.RunServer.run_server(port, host, **kwargs)
