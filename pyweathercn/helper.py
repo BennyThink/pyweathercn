@@ -61,10 +61,14 @@ class WeatherHandler(BaseHandler):
         sign and return
         :return: hex and raw request in XML
         """
-        # get parameter
-        city = self.get_argument('city', None)
-        day = self.get_argument('day', None)
-
+        # get parameter, compatibility with json
+        if self.request.headers.get('Content-Type') == 'application/json':
+            data = json.loads(self.request.body)
+            city = data.get('city')
+            day = data.get('day')
+        else:
+            city = self.get_argument('city', None)
+            day = self.get_argument('day', None)
         # mandatory param missing
         if city is None:
             return make_json(4)
