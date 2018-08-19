@@ -13,9 +13,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
-from pyweathercn.city import CITY
-
-CODE = {0: 'success', 1: 'city not found', 2: 'craw denied', 3: 'permission denied', 4: 'city param error'}
+from pyweathercn.constant import CITY, CODE
 
 
 def today_tip(soup):

@@ -10,23 +10,13 @@ __author__ = 'Benny <benny@bennythink.com>'
 import json
 import socket
 from platform import uname
-from pyweathercn.__version__ import __version__
+
 from concurrent.futures import ThreadPoolExecutor
 from tornado import web, ioloop, httpserver, gen
 from tornado.concurrent import run_on_executor
 from pyweathercn.craw import make_json
 from pyweathercn.utils import require_api
-
-BANNER = r'''
-
-._           _   _. _|_ |_   _  ._ _ ._
-|_) \/ \/\/ (/_ (_|  |_ | | (/_ | (_ | |
-|   /
-
-A weather forecast library, version %s
-
-Written by %s
-''' % (__version__, __author__)
+from pyweathercn.constant import CODE, BANNER
 
 
 class BaseHandler(web.RequestHandler):
@@ -36,7 +26,6 @@ class BaseHandler(web.RequestHandler):
 
 class IndexHandler(BaseHandler):
 
-    @require_api
     def get(self):
         help_msg = '''Welcome to pyweathercn!
         There are two ways to interact with this RESTAPI.
@@ -50,6 +39,9 @@ class IndexHandler(BaseHandler):
         base = '''<!DOCTYPE html><html><head><title>Welcome to pyweathercn!</title></head>
         <body>%s</body></html>'''
         self.write(base % (BANNER + '<br>' + help_msg).replace('\n', '<br>'))
+
+    def post(self):
+        self.get()
 
 
 class WeatherHandler(BaseHandler):
@@ -78,18 +70,20 @@ class WeatherHandler(BaseHandler):
             try:
                 sp = data['data']['forecast'][int(day)]
             except IndexError:
-                sp = {"status": 3, "message": 'day out of range'}
+                sp = {"status": 5, "message": CODE.get(5)}
             return json.dumps(sp)
         # return whole json.
         else:
             return json.dumps(make_json(city))
 
+    @require_api
     @gen.coroutine
     def get(self):
         self.set_header("Content-Type", "application/json")
         res = yield self.run_request()
         self.write(res)
 
+    @require_api
     @gen.coroutine
     def post(self):
         self.set_header("Content-Type", "application/json")
@@ -129,4 +123,6 @@ class RunServer:
 
 
 if __name__ == "__main__":
+    # import pyweathercn.utils
+    # pyweathercn.utils.DB = r'C:\Users\Benny\PycharmProjects\pyweathercn\sample.sqlite'
     RunServer.run_server()

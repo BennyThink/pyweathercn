@@ -9,12 +9,14 @@ Installation
 ------------
 
 To install this package, simply use pip: ``$ pip3 install pyweathercn``.
+
 There's no plan to support Python 2.
 
 Example
 --------
 
 Python Console example:
+******************************
 
 .. code:: python
 
@@ -34,6 +36,7 @@ Python Console example:
        '北京：28日（周一）多云25℃/15℃东北风 <3级'
 
 Run as a server:
+******************************
 
 .. code:: python
 
@@ -54,6 +57,24 @@ Mandatory parameter is city, optional parameter is day.
 GET: ``http://127.0.0.1:8888/weather?city=上海&day=2``
 
 POST:``http://127.0.0.1:8888/weather`` with form/json key-value:{"city","深圳"}
+
+
+Run as a server(with API authentication):
+*********************************************
+
+.. code:: python
+
+       import pyweathercn
+       # running on http://0.0.0.0:3333
+       pyweathercn.server(auth='/path/to/database.sqlite')
+
+Please refer to ``sample.sqlite`` for database format. In this sample:
+
+* times: total times for access this API
+* restrict: set to 0 avoid time limit
+* key: no more than 32 characters.
+
+You only need to add a parameter called ``key`` for your request.
 
 TODO
 -----

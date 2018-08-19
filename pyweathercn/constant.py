@@ -1,4 +1,15 @@
-# coding:utf-8
+#!/usr/bin/python
+# coding: utf-8
+
+# pyweathercn - constant.py
+# 2018/8/19 14:55
+#
+
+__author__ = "Benny <benny@bennythink.com>"
+
+
+from pyweathercn.__version__ import __version__
+
 CITY = {
     "岳西": "101220608",
     "海拉尔": "101081001",
@@ -2572,3 +2583,24 @@ CITY = {
     "庆云": "101120407",
     "红安": "101200502"
 }
+
+CODE = {0: 'success',
+        1: 'city not found',
+        2: 'craw denied',
+        3: 'permission denied',
+        4: 'city param error',
+        5: 'day out of range',
+        6: 'A valid key is required to access this API',
+        7: 'You have exceeded your request limit!',
+        8: '', }
+
+BANNER = r'''
+
+._           _   _. _|_ |_   _  ._ _ ._
+|_) \/ \/\/ (/_ (_|  |_ | | (/_ | (_ | |
+|   /
+
+A weather forecast library, version %s
+
+Written by %s
+''' % (__version__, __author__)

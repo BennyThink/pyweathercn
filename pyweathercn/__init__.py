@@ -7,7 +7,10 @@
 
 __author__ = 'Benny <benny@bennythink.com>'
 
+import os
+
 import pyweathercn.helper
+import pyweathercn.utils
 
 
 class Weather:
@@ -103,11 +106,12 @@ class Weather:
         return s
 
 
-def server(port=8888, host="0.0.0.0", **kwargs):
+def server(port=8888, host="0.0.0.0", auth=None, **kwargs):
     """
     run RESTAPI server.
     :param port: the port to listen on. Default is 8888
     :param host: the host to listen on. Default is localhost.
+    :param auth: API authentication database path
     :param kwargs: any keyword argument support by tornado. example for SSL:
     ```ssl_options={
         "certfile": "fullchain.pem",
@@ -115,4 +119,8 @@ def server(port=8888, host="0.0.0.0", **kwargs):
     ```
     :return: None
     """
-    pyweathercn.helper.RunServer.run_server(port, host, **kwargs)
+    if auth is not None and not os.path.isfile(auth):
+        raise Exception('Database file not exists!')
+    else:
+        pyweathercn.utils.DB = auth
+        pyweathercn.helper.RunServer.run_server(port, host, **kwargs)
