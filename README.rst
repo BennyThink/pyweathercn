@@ -46,6 +46,7 @@ Run as a server:
        # running on http://0.0.0.0:3333
        pyweathercn.server(3333)
        # support ssl: https://www.example.com:8888
+       # if you fail to listen on www.example.com, you may try 0.0.0.0 instead.
        pyweathercn.server('8888', 'www.example.com', ssl_options={
            "certfile": "fullchain.pem",
            "keyfile": "privkey.pem"})
@@ -78,7 +79,8 @@ You only need to add a parameter called ``key`` for your request.
 
 TODO
 -----
-- API Key authentication
+- add server deployment:normal systemd and docker
+- add cache policy on webserver
 
 
 License
