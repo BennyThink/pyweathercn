@@ -7,13 +7,17 @@
 
 __author__ = "Benny <benny@bennythink.com>"
 
+import logging
 import json
+import socket
 import sqlite3
-import time
+
+import redis
 
 from pyweathercn.constant import CODE
 
 DB = ":memory:"
+logging.basicConfig(level=logging.INFO)
 
 
 class RequireApi:
@@ -43,7 +47,6 @@ class RequireApi:
 
     def auth(self):
         # return True(contine) or False
-
         if not self.__auth:
             v = (True, None)
         else:
@@ -94,33 +97,46 @@ def api(fun):
 
 class TestCache:
     def __init__(self, timeout):
-        # use redis, maybe
-        pass
+        self.__timeout = timeout
+        self.r = redis.Redis(decode_responses=True)
 
-    def __del__(self):
-        pass
-
-    def test(self, city):
-        # true: return db data
-        # false: run requests
-        pass
+    def retrieve(self, city):
+        result = self.r.get(city)
+        if result:
+            return json.loads(self.r.get(city))
 
     def update(self, city, weather):
-        pass
+        if weather.get('data'):
+            self.r.set(city, json.dumps(weather, ensure_ascii=False), ex=self.__timeout)
+
+    @staticmethod
+    def check_redis():
+        try:
+            s = socket.socket()
+            s.connect(("127.0.0.1", 6379))
+            s.close()
+            return True
+        except ConnectionRefusedError:
+            return False
 
 
 def cache(timeout):
     def func(fun):
         def inner(*args):
-            t = TestCache(timeout)
-            valid = t.test(args)
-            if valid:
-                print('not requesting', valid)
-                return valid
+            if TestCache.check_redis():
+                t = TestCache(timeout)
+                valid = t.retrieve(args[0])
+                if valid:
+                    logging.info('Retrieving info from redis')
+                    return valid
+                else:
+                    logging.info('Cache expired. Re-requesting now...')
+                    res = fun(args[0])
+                    t.update(args[0], res)
+                    return res
             else:
-                print('requesting...')
+                logging.warning('Please install Redis for better performance!')
                 res = fun(args[0])
-                t.update(args[0], res)
                 return res
 
         return inner

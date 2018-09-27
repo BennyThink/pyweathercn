@@ -22,7 +22,8 @@ VERSION = None
 REQUIRED = [
     "tornado",
     "beautifulsoup4",
-    "requests"
+    "requests",
+    "redis"
 ]
 
 # The rest you shouldn't have to touch too much :)

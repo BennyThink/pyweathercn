@@ -37,6 +37,7 @@ Python Console example:
 
 Run as a server:
 ******************************
+In order for better performance, please install Redis.
 
 .. code:: python
 
@@ -79,8 +80,7 @@ You only need to add a parameter called ``key`` for your request.
 
 TODO
 -----
-- add server deployment:normal systemd and docker
-- add cache policy on webserver
+- add server deployment: normal systemd and docker
 
 
 License

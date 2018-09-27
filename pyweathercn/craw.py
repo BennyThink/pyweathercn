@@ -96,7 +96,7 @@ def convert_city(name):
     return CITY.get(name)
 
 
-@cache(timeout=60)
+@cache(timeout=3600)
 def make_json(city):
     """
     make final request json
@@ -105,25 +105,28 @@ def make_json(city):
     """
     if city == 4:
         return {"status": "error", "message": CODE[4]}
-    url = 'http://www.weather.com.cn/weather/%s.shtml'
 
     city_code = convert_city(city)
     # city not found
-
     if city_code is None:
         return {"status": "error", "message": CODE[1]}
 
-    response = requests.get(url % city_code)
-    if response.status_code != 200:
-        return {"status": "fail", "message": CODE[2]}
+    try:
+        url = 'http://www.weather.com.cn/weather/%s.shtml'
+        response = requests.get(url % city_code)
+        if response.status_code != 200:
+            return {"status": "fail", "message": CODE[2]}
 
-    response.encoding = 'utf-8'
-    soup = BeautifulSoup(response.text, 'html.parser')
+        response.encoding = 'utf-8'
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-    sample = {"data": {"city": city, "aqi": js_hour_aqi(soup), "tip": today_tip(soup), "temp": js_hour_temp(soup),
-                       "forecast": seven_day(soup)}, "status": "success", "message": CODE[0]}
-
-    return sample
+        sample = {"data": {"city": city, "aqi": js_hour_aqi(soup), "tip": today_tip(soup), "temp": js_hour_temp(soup),
+                           "forecast": seven_day(soup)}, "status": "success", "message": CODE[0]}
+        response.close()
+        return sample
+    except Exception as e:
+        sample = {"data": {}, "status": "fail", "message": e.args[0].reason.args[0]}
+        return sample
 
 
 if __name__ == '__main__':
