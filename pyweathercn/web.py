@@ -54,7 +54,7 @@ class WeatherHandler(BaseHandler):
         :return: hex and raw request in XML
         """
         # get parameter, compatibility with json
-        if self.request.headers.get('Content-Type') == 'application/json':
+        if self.request.headers.get('Content-Type') == 'application/json' and self.request.body:
             data = json.loads(self.request.body)
             city = data.get('city')
             day = data.get('day')

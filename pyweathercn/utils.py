@@ -73,7 +73,7 @@ class RequireApi:
     @staticmethod
     def get_key(s):
         # get parameter, compatibility with json
-        if s.request.headers.get('Content-Type') == 'application/json':
+        if s.request.headers.get('Content-Type') == 'application/json' and s.request.body:
             data = json.loads(s.request.body)
             key = data.get('key')
         else:
