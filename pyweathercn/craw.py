@@ -115,7 +115,7 @@ def make_json(city):
         url = 'http://www.weather.com.cn/weather/%s.shtml'
         response = requests.get(url % city_code)
         if response.status_code != 200:
-            return {"status": "fail", "message": CODE[2]}
+            return {"status": "fail", "message": CODE[100]}
 
         response.encoding = 'utf-8'
         soup = BeautifulSoup(response.text, 'html.parser')

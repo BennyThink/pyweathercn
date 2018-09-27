@@ -7,7 +7,6 @@
 
 __author__ = "Benny <benny@bennythink.com>"
 
-
 from pyweathercn.__version__ import __version__
 
 CITY = {
@@ -2586,13 +2585,13 @@ CITY = {
 
 CODE = {0: 'ほら',
         1: 'city not found',
-        2: 'craw denied',
+        2: 'unknown error',
         3: 'permission denied',
         4: 'city param error',
         5: 'day out of range',
         6: 'A valid key is required to access this API',
         7: 'You have exceeded your request limit!',
-        8: '', }
+        100: 'craw denied'}
 
 BANNER = r'''
 

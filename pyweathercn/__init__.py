@@ -61,9 +61,9 @@ class Weather:
         :param day: day option. Default is 0 which will return today's weather information.
         :return: json response
         """
-        if raw and self.data['status'] == 0:
+        if raw and self.data['status'] == 'success':
             return self.data['data']['forecast'][day]
-        elif self.data['status'] == 0:
+        elif self.data['status'] == 'success':
             return self.data['data']['city'] + '：' + self.__make_str(self.data['data']['forecast'][day])
         else:
             return self.data['message']
@@ -76,10 +76,10 @@ class Weather:
         :param text: default tooltip
         :return: json response.
         """
-        if raw and self.data['status'] == 0:
+        if raw and self.data['status'] == 'success':
             return self.data['data'][_type]
 
-        elif self.data['status'] == 0:
+        elif self.data['status'] == 'success':
             return self.data['data']['city'] + text + "：" + self.data['data'][_type]
         else:
             return self.data['message']
@@ -91,9 +91,9 @@ class Weather:
         :param index: index for forecast function.
         :return: response.
         """
-        if raw and self.data['status'] == 0:
+        if raw and self.data['status'] == 'success':
             return self.data['data']['forecast'][index]
-        elif self.data['status'] == 0:
+        elif self.data['status'] == 'success':
             return self.data['data']['city'] + '：' + self.__make_str(self.data['data']['forecast'][index])
         else:
             return self.data['message']
