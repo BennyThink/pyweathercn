@@ -14,6 +14,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from pyweathercn.constant import CITY, CODE
+from pyweathercn.utils import cache
 
 
 def today_tip(soup):
@@ -95,30 +96,32 @@ def convert_city(name):
     return CITY.get(name)
 
 
+@cache(timeout=60)
 def make_json(city):
     """
     make final request json
-    :param city: city key
+    :param city: city name
     :return: json result
     """
     if city == 4:
-        return {"status": 4, "message": CODE[4]}
+        return {"status": "error", "message": CODE[4]}
     url = 'http://www.weather.com.cn/weather/%s.shtml'
 
     city_code = convert_city(city)
     # city not found
+
     if city_code is None:
-        return {"status": 1, "message": CODE[1]}
+        return {"status": "error", "message": CODE[1]}
 
     response = requests.get(url % city_code)
     if response.status_code != 200:
-        return {"status": 2, "message": CODE[2]}
+        return {"status": "fail", "message": CODE[2]}
 
     response.encoding = 'utf-8'
     soup = BeautifulSoup(response.text, 'html.parser')
 
     sample = {"data": {"city": city, "aqi": js_hour_aqi(soup), "tip": today_tip(soup), "temp": js_hour_temp(soup),
-                       "forecast": seven_day(soup)}, "status": 0, "message": CODE[0]}
+                       "forecast": seven_day(soup)}, "status": "success", "message": CODE[0]}
 
     return sample
 

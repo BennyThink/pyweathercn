@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # coding:utf-8
 
-# pyweathercn - helper.py
+# pyweathercn - web.py
 # 2018/5/22 16:32
 # For running up tornado
 
@@ -15,7 +15,7 @@ from concurrent.futures import ThreadPoolExecutor
 from tornado import web, ioloop, httpserver, gen
 from tornado.concurrent import run_on_executor
 from pyweathercn.craw import make_json
-from pyweathercn.utils import require_api
+from pyweathercn.utils import api
 from pyweathercn.constant import CODE, BANNER
 
 
@@ -38,7 +38,7 @@ class IndexHandler(BaseHandler):
         '''
         base = '''<!DOCTYPE html><html><head><title>Welcome to pyweathercn!</title></head>
         <body>%s</body></html>'''
-        self.write(base % (BANNER + '<br>' + help_msg).replace('\n', '<br>'))
+        self.write(base % ('<pre>' + BANNER + '</pre>' + '<br>' + help_msg).replace('\n', '<br>'))
 
     def post(self):
         self.get()
@@ -70,20 +70,20 @@ class WeatherHandler(BaseHandler):
             try:
                 sp = data['data']['forecast'][int(day)]
             except IndexError:
-                sp = {"status": 5, "message": CODE.get(5)}
+                sp = {"status": "error", "message": CODE.get(5)}
             return json.dumps(sp)
         # return whole json.
         else:
             return json.dumps(make_json(city))
 
-    @require_api
+    @api
     @gen.coroutine
     def get(self):
         self.set_header("Content-Type", "application/json")
         res = yield self.run_request()
         self.write(res)
 
-    @require_api
+    @api
     @gen.coroutine
     def post(self):
         self.set_header("Content-Type", "application/json")

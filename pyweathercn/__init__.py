@@ -9,7 +9,7 @@ __author__ = 'Benny <benny@bennythink.com>'
 
 import os
 
-import pyweathercn.helper
+import pyweathercn.web
 import pyweathercn.utils
 
 
@@ -23,7 +23,7 @@ class Weather:
     """
 
     def __init__(self, city_name):
-        self.data = pyweathercn.helper.make_json(city_name)
+        self.data = pyweathercn.web.make_json(city_name)
 
     def __del__(self):
         del self.data
@@ -34,25 +34,25 @@ class Weather:
         :param raw: return raw json
         :return: json or string.
         """
-        return self.__return_result__(raw, 0)
+        return self.__return_result(raw, 0)
 
     def tomorrow(self, raw=False):
-        return self.__return_result__(raw, 1)
+        return self.__return_result(raw, 1)
 
     def two_days(self, raw=False):
-        return self.__return_result__(raw, 2)
+        return self.__return_result(raw, 2)
 
     def three_days(self, raw=False):
-        return self.__return_result__(raw, 3)
+        return self.__return_result(raw, 3)
 
     def aqi(self, raw=False):
-        return self.__make__(raw, 'aqi', 'AQI')
+        return self.__make(raw, 'aqi', 'AQI')
 
     def temp(self, raw=False):
-        return self.__make__(raw, 'temp', '')
+        return self.__make(raw, 'temp', '')
 
     def tip(self, raw=False):
-        return self.__make__(raw, 'tip', '温馨提示')
+        return self.__make(raw, 'tip', '温馨提示')
 
     def forecast(self, raw=False, day=0):
         """
@@ -64,11 +64,11 @@ class Weather:
         if raw and self.data['status'] == 0:
             return self.data['data']['forecast'][day]
         elif self.data['status'] == 0:
-            return self.data['data']['city'] + '：' + self.__make_str__(self.data['data']['forecast'][day])
+            return self.data['data']['city'] + '：' + self.__make_str(self.data['data']['forecast'][day])
         else:
             return self.data['message']
 
-    def __make__(self, raw, _type, text):
+    def __make(self, raw, _type, text):
         """
         make specified json
         :param raw: raw json or not
@@ -84,7 +84,7 @@ class Weather:
         else:
             return self.data['message']
 
-    def __return_result__(self, raw, index):
+    def __return_result(self, raw, index):
         """
         today, tomorrow, two_days, three_days.
         :param raw: set True to return raw json, otherwise it shall return plain string.
@@ -94,12 +94,12 @@ class Weather:
         if raw and self.data['status'] == 0:
             return self.data['data']['forecast'][index]
         elif self.data['status'] == 0:
-            return self.data['data']['city'] + '：' + self.__make_str__(self.data['data']['forecast'][index])
+            return self.data['data']['city'] + '：' + self.__make_str(self.data['data']['forecast'][index])
         else:
             return self.data['message']
 
     @staticmethod
-    def __make_str__(dic):
+    def __make_str(dic):
         s = ''
         for i in dic:
             s = s + dic[i]
@@ -120,7 +120,7 @@ def server(port=8888, host="0.0.0.0", auth=None, **kwargs):
     :return: None
     """
     if auth is not None and not os.path.isfile(auth):
-        raise Exception('Database file not exists!')
+        raise FileNotFoundError('Database file not exists!')
     else:
         pyweathercn.utils.DB = auth
-        pyweathercn.helper.RunServer.run_server(port, host, **kwargs)
+        pyweathercn.web.RunServer.run_server(port, host, **kwargs)

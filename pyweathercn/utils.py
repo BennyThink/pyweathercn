@@ -7,65 +7,122 @@
 
 __author__ = "Benny <benny@bennythink.com>"
 
-import sqlite3
 import json
+import sqlite3
+import time
 
 from pyweathercn.constant import CODE
 
 DB = ":memory:"
 
 
-def auth(k):
-    print(123, DB)
-    if DB == ":memory:" or DB is None:
-        # disable auth
-        return True, None
-    elif k is None:
-        # key required
-        return False, {"status": 6, "message": CODE.get(6)}
-    else:
-        con = sqlite3.connect(DB)
-        cur = con.cursor()
-        cur.execute('SELECT times,restrict FROM auth WHERE key=?', (k,))
-        data = cur.fetchall()
-
-        if data and data[0][1] == 0:
-            # unlimited user
-            v = (True, None)
-        elif data and data[0][0] >= 1:
-            # valid, limited user. we need to decrease.
-            cur.execute('UPDATE auth SET times=? WHERE key=?', (data[0][0] - 1, k))
-            con.commit()
-            v = (True, None)
-        elif data and data[0][0] <= 0:
-            # exceed
-            v = (False, {"status": 7, "message": CODE.get(7)})
+class RequireApi:
+    def __init__(self, k):
+        if DB == ":memory:" or DB is None:
+            # disable auth
+            self.__auth = False
+            self.__msg = None
+            self.__key = None
+        elif k is None:
+            # missed key
+            self.con = sqlite3.connect(DB)
+            self.cur = self.con.cursor()
+            self.__auth = True
+            self.__msg = {"status": 6, "message": CODE.get(6)}
+            self.__key = None
         else:
-            # invalid key provided
-            v = (False, {"status": 6, "message": CODE.get(6)})
+            self.con = sqlite3.connect(DB)
+            self.cur = self.con.cursor()
+            self.__auth = True
+            self.__msg = None
+            self.__key = k
 
-        con.close()
+    def __del__(self):
+        if self.__auth:
+            self.con.close()
+
+    def auth(self):
+        # return True(contine) or False
+
+        if not self.__auth:
+            v = (True, None)
+        else:
+            self.cur.execute('SELECT times,restrict FROM auth WHERE key=?', (self.__key,))
+            data = self.cur.fetchall()
+
+            if data and data[0][1] == 0:
+                # unlimited user
+                v = (True, None)
+            elif data and data[0][0] >= 1:
+                # valid, limited user. we need to decrease.
+                self.cur.execute('UPDATE auth SET times=? WHERE key=?', (data[0][0] - 1, self.__key))
+                self.con.commit()
+                v = (True, None)
+            elif data and data[0][0] <= 0:
+                # exceed
+                v = (False, {"status": "error", "message": CODE.get(7)})
+            else:
+                # invalid key provided
+                v = (False, {"status": "error", "message": CODE.get(6)})
+
         return v
 
-
-def get_key(self):
-    # get parameter, compatibility with json
-    if self.request.headers.get('Content-Type') == 'application/json':
-        data = json.loads(self.request.body)
-        key = data.get('key')
-    else:
-        key = self.get_argument('key', None)
-
-    return key
-
-
-def require_api(fun):
-    def wrapper(self):
-        k, msg = auth(get_key(self))
-        if not k:
-            self.write(msg)
+    @staticmethod
+    def get_key(s):
+        # get parameter, compatibility with json
+        if s.request.headers.get('Content-Type') == 'application/json':
+            data = json.loads(s.request.body)
+            key = data.get('key')
         else:
+            key = s.get_argument('key', None)
+
+        return key
+
+
+def api(fun):
+    def wrapper(self):
+        key = RequireApi.get_key(self)
+        k, msg = RequireApi(key).auth()
+        if k:
             res = fun(self)
             return res
+        else:
+            self.write(msg)
 
     return wrapper
+
+
+class TestCache:
+    def __init__(self, timeout):
+        # use redis, maybe
+        pass
+
+    def __del__(self):
+        pass
+
+    def test(self, city):
+        # true: return db data
+        # false: run requests
+        pass
+
+    def update(self, city, weather):
+        pass
+
+
+def cache(timeout):
+    def func(fun):
+        def inner(*args):
+            t = TestCache(timeout)
+            valid = t.test(args)
+            if valid:
+                print('not requesting', valid)
+                return valid
+            else:
+                print('requesting...')
+                res = fun(args[0])
+                t.update(args[0], res)
+                return res
+
+        return inner
+
+    return func
