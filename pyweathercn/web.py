@@ -35,10 +35,11 @@ class IndexHandler(BaseHandler):
         <code>127.0.0.1:8888/weather?city=上海&day=2</code> - get 2 days details
         The second one is POST method, invoke <code>127.0.0.1:8888/weather</code>
          with url-encoded form as above. Post JSON is also supported.
-        '''
-        base = '''<!DOCTYPE html><html><head><title>Welcome to pyweathercn!</title></head>
-        <body>%s</body></html>'''
-        self.write(base % ('<pre>' + BANNER + '</pre>' + '<br>' + help_msg).replace('\n', '<br>'))
+        '''.replace('\n', '<br>')
+
+        base = f'''<!DOCTYPE html><html><head><title>Welcome to pyweathercn!</title></head>
+                <body><pre>{BANNER}</pre><br>{help_msg}</body></html>'''
+        self.write(base)
 
     def post(self):
         self.get()
