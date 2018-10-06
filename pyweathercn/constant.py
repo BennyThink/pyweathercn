@@ -2583,6 +2583,7 @@ CITY = {
     "红安": "101200502"
 }
 
+
 CODE = {0: 'ほら',
         1: 'city not found',
         2: 'unknown error',
@@ -2592,6 +2593,13 @@ CODE = {0: 'ほら',
         6: 'A valid key is required to access this API',
         7: 'You have exceeded your request limit!',
         100: 'craw denied'}
+
+HTTP = {
+    'error': 400,
+    'fail': 500,
+    'success': 200
+}
+
 
 BANNER = r'''
 

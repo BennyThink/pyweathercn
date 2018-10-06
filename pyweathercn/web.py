@@ -16,7 +16,7 @@ from tornado import web, ioloop, httpserver, gen
 from tornado.concurrent import run_on_executor
 from pyweathercn.craw import make_json
 from pyweathercn.utils import api
-from pyweathercn.constant import CODE, BANNER
+from pyweathercn.constant import CODE, BANNER, HTTP
 
 
 class BaseHandler(web.RequestHandler):
@@ -64,18 +64,21 @@ class WeatherHandler(BaseHandler):
             day = self.get_argument('day', None)
         # mandatory param missing
         if city is None:
-            return make_json(4)
+            self.set_status(400)
+            response: dict = make_json(4)
         # day, return specified day.
         elif day:
             data = make_json(city)
             try:
-                sp = data['data']['forecast'][int(day)]
+                response = {"status": "success", "message": CODE.get(0), "data": data['data']['forecast'][int(day)]}
             except IndexError:
-                sp = {"status": "error", "message": CODE.get(5)}
-            return json.dumps(sp)
+                response = {"status": "error", "message": CODE.get(5)}
         # return whole json.
         else:
-            return json.dumps(make_json(city))
+            response = make_json(city)
+        # set http code and response
+        self.set_status(HTTP.get(response['status'], 418))
+        return json.dumps(response)
 
     @api
     @gen.coroutine

@@ -39,7 +39,7 @@ class TestAPI(AsyncHTTPTestCase):
         assert code['data']['city'] == '北京' and code['status'] == 'success'
 
         code = json.loads(self.fetch(case[3]).body.decode('utf-8'))
-        assert '后天' in code['date']
+        assert '后天' in code['data']['date']
 
     @logger
     def test_post(self):
@@ -57,7 +57,7 @@ class TestAPI(AsyncHTTPTestCase):
         assert code['data']['city'] == '北京' and code['status'] == 'success'
 
         code = json.loads(self.fetch('/weather', method='POST', body=case[3]).body.decode('utf-8'))
-        assert '后天' in code['date']
+        assert '后天' in code['data']['date']
 
 
 if __name__ == '__main__':
