@@ -119,7 +119,7 @@ class RunServer:
 
         try:
             print(BANNER)
-            print('Server is running on http://%s:%s' % (get_host_ip(), port))
+            print(f'Server is running on http://{get_host_ip()}:{port}')
             ioloop.IOLoop.instance().current().start()
         except KeyboardInterrupt:
             ioloop.IOLoop.instance().stop()

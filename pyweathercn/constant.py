@@ -2583,8 +2583,7 @@ CITY = {
     "红安": "101200502"
 }
 
-
-CODE = {0: 'ほら',
+CODE = {0: 'success',
         1: 'city not found',
         2: 'unknown error',
         3: 'permission denied',
@@ -2600,15 +2599,14 @@ HTTP = {
     'success': 200
 }
 
-
-BANNER = r'''
+BANNER = rf'''
 
 ._           _   _. _|_ |_   _  ._ _ ._
 |_) \/ \/\/ (/_ (_|  |_ | | (/_ | (_ | |
 |   /
 
-A weather forecast library, version %s
+A weather forecast library, version {__version__}
 
-Written by %s
+Written by {__author__}
 GitHub: https://github.com/BennyThink/pyweathercn
-''' % (__version__, __author__)
+'''

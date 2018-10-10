@@ -2,6 +2,8 @@ pyweathercn:
 ============
 .. image:: https://travis-ci.org/BennyThink/pyweathercn.svg?branch=master
     :target: https://travis-ci.org/BennyThink/pyweathercn
+.. image:: https://badge.fury.io/py/pyweathercn.svg
+    :target: https://badge.fury.io/py/pyweathercn
 
 An weather forecast library from www.weather.com.cn
 

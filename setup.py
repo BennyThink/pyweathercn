@@ -3,6 +3,7 @@
 
 # Note: To use the 'upload' functionality of this file, you must:
 #   $ pip install twine
+# python setup.py sdist upload -r pypi
 
 import io
 import os

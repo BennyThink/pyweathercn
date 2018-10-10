@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 def logger(fun):
     def wrapper(args):
         res = fun(args)
-        logging.info('Testing %s now...' % fun.__name__)
+        logging.info(f'Testing {fun.__name__} now...')
         return res
 
     return wrapper

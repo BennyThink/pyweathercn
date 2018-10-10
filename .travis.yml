@@ -1,8 +1,18 @@
 language: python
 python:
-  - "3.6"
+- '3.6'
 install:
-  - pip install tornado beautifulsoup4 requests redis
+- pip install tornado beautifulsoup4 requests redis
 script:
-  - python tests/test_api.py
-  - python tests/test_weather.py
+- python tests/test_api.py
+- python tests/test_weather.py
+
+deploy:
+  provider: pypi
+  user: BennyThink
+  password:
+    secure: UOjqmuDxhUCwEqsy/9VnYSTrOARkO9DG4qn4wu3ZXUBpRlAXa9oYkJJCrwJkqDvYngOc3JpziKEuDJ5160uuXcw04b8knonXe2MewKzS6fSRMe7TtACTWVhPKkJNqlfwQal5sCiX1Ki+fRoBVbSKyWwNI2d1tQtJ8SWaJSjbNF6xiC4hLC5QdlbFMXwNiF1G/ui4TIxkhVDdPzqHLR9A79WzTIVL5JJVr6Jk6TDi/VYbM623nHvfPkkuAtj1TMCktUoSG7XeMBj4EiaZTWt8MsIzAJW5T72NTeNnzLu18+305M5ZBRbUKahNe750EfH31aYjKJ+yPBggaJ1Eas0bM9uD0vuWZTaK3eZk8fY2Vu3r9+TDhFkaY6lWo4HfRrJmwm5hwljKG7P9C4kBFM31HFU8RWhXPHFqubvJDKDJ1SU2MpfsV43WDTZMTbgqZfrONrO86pnJ2hWOOmTbwFJ5V+jT0Yz7ljaE2jDCGm4bb97orANqqN8JdKqjymCZnGLjy7lSp6pkQ4KZq1QY698LZt+cJW/eaFEI9UrZfyDa/R/6NWCovIkfEZImJBHNgaX8ZN9BDRMFBHW4M0a17NtdduMKXYuGbZvLRxVe8O2JaxWikJjzwCazZVZxowh6PGY/UQx7XfI19lwcGoPrWP8jEuqhMK3vS7atNBCi5K9WUnc=
+  on:
+    python: 3.6
+    tags: true
+    branch: master
