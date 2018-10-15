@@ -82,7 +82,7 @@ You only need to add a parameter called ``key`` for your request.
 
 TODO
 -----
-- add server deployment: normal systemd and docker
+- add server deployment: systemd and docker
 
 
 License
