@@ -64,20 +64,23 @@ class WeatherHandler(BaseHandler):
             day = self.get_argument('day', None)
         # mandatory param missing
         if city is None:
-            self.set_status(400)
-            response: dict = make_json(4)
+            self.set_status(HTTP.get(400002))
+            response = {"code": 400002, "message": CODE[400002], "error": CODE[400002]}
         # day, return specified day.
         elif day:
             data = make_json(city)
             try:
-                response = {"status": "success", "message": CODE.get(0), "data": data['data']['forecast'][int(day)]}
-            except IndexError:
-                response = {"status": "error", "message": CODE.get(5)}
+                response = data['forecast'][int(day)]
+            except IndexError as e:
+                response = {"code": 400003, "message": CODE[400003], "error": str(e)}
+            except KeyError as e:
+                response = {"code": 400001, "message": CODE[400001], "error": str(e)}
+
         # return whole json.
         else:
             response = make_json(city)
         # set http code and response
-        self.set_status(HTTP.get(response['status'], 418))
+        self.set_status(HTTP.get(response.get('code'), 418))
         return json.dumps(response)
 
     @api

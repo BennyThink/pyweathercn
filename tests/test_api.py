@@ -27,7 +27,9 @@ class TestAPI(AsyncHTTPTestCase):
     def test_get(self):
         case = ['/weather?city=%s' % url_escape('呗'), '/weather?c=%s' % url_escape('北京'),
                 '/weather?city=%s' % url_escape('北京'), '/weather?city=%s&day=2' % url_escape('北京')]
-        result = [{'status': 'error', 'message': 'city not found'}, {'status': 'error', 'message': 'city param error'}]
+        result = [{'code': 400001, 'message': 'city not found.', 'error': 'city not found.'},
+                  {'code': 400002, 'message': 'city param error', 'error': 'city param error'}
+                  ]
 
         code = json.loads(self.fetch(case[0]).body.decode('utf-8'))
         assert result[0] == code
@@ -36,16 +38,18 @@ class TestAPI(AsyncHTTPTestCase):
         assert result[1] == code
 
         code = json.loads(self.fetch(case[2]).body.decode('utf-8'))
-        assert code['data']['city'] == '北京' and code['status'] == 'success'
+        assert code['city'] == '北京' and len(code['forecast']) != 0
 
         code = json.loads(self.fetch(case[3]).body.decode('utf-8'))
-        assert '后天' in code['data']['date']
+        assert '后天' in code['date']
 
     @logger
     def test_post(self):
         case = ['city=%s' % url_escape('无'), 'c=%s' % url_escape('北京'),
                 'city=%s' % url_escape('北京'), 'city=%s&day=2' % url_escape('北京')]
-        result = [{'status': 'error', 'message': 'city not found'}, {'status': 'error', 'message': 'city param error'}]
+        result = [{'code': 400001, 'message': 'city not found.', 'error': 'city not found.'},
+                  {'code': 400002, 'message': 'city param error', 'error': 'city param error'}
+                  ]
 
         code = json.loads(self.fetch('/weather', method='POST', body=case[0]).body.decode('utf-8'))
         assert result[0] == code
@@ -54,10 +58,10 @@ class TestAPI(AsyncHTTPTestCase):
         assert result[1] == code
 
         code = json.loads(self.fetch('/weather', method='POST', body=case[2]).body.decode('utf-8'))
-        assert code['data']['city'] == '北京' and code['status'] == 'success'
+        assert code['city'] == '北京' and code.get('code') is None
 
         code = json.loads(self.fetch('/weather', method='POST', body=case[3]).body.decode('utf-8'))
-        assert '后天' in code['data']['date']
+        assert '后天' in code['date']
 
 
 if __name__ == '__main__':

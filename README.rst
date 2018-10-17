@@ -27,7 +27,7 @@ Python Console example:
        '重庆：20'
        >>> w = pyweathercn.Weather('北京')
        >>> w.data
-       {'data': {'city': '北京', 'aqi': '159', 'tip': '紫外线指数很强涂擦SPF20以上，PA++护肤品，避强光。穿衣指数热适合穿T恤、短薄外套等夏季服装。', 'temp': '20', 'forecast': [{'date': '23日（今天）', 'type': '晴', 'temp': '15℃', 'wind': '西南风 3-4级'}, {'date': '24日（明天）', 'type': '晴', 'temp': '31℃/17℃', 'wind': '南风 3-4级'}, {'date': '25日（后天）', 'type': '晴转多云', 'temp': '31℃/19℃', 'wind': '西南风 <3级'}, {'date': '26日（周六）', 'type': '阴转多云', 'temp': '30℃/16℃', 'wind': '西风 <3级'}, {'date': '27日（周日）', 'type': '多云', 'temp': '29℃/15℃', 'wind': '南风 <3级'}, {'date': '28日（周一）', 'type': '多云', 'temp': '25℃/15℃', 'wind': '东北风 <3级'}, {'date': '29日（周二）', 'type': '晴', 'temp': '29℃/15℃', 'wind': '西南风 <3级'}]}, 'status': 0, 'message': 'success'}
+       {'city': '北京', 'aqi': '73', 'tip': '紫外线指数中等涂擦SPF大于15、PA+防晒护肤品。穿衣指数较舒适建议穿薄外套或牛仔裤等服装。', 'temp': '11', 'forecast': [{'date': '17日（今天）', 'type': '晴', 'temp': '4℃', 'wind': '无持续风向 <3级'}, {'date': '18日（明天）', 'type': '晴', 'temp': '18℃/5℃', 'wind': '南风 <3级'}, {'date': '19日（后天）', 'type': '多云', 'temp': '18℃/6℃', 'wind': '西南风 <3级'}, {'date': '20日（周六）', 'type': '多云', 'temp': '18℃/7℃', 'wind': '南风 <3级'}, {'date': '21日（周日）', 'type': '多云', 'temp': '18℃/8℃', 'wind': '南风 <3级'}, {'date': '22日（周一）', 'type': '多云转晴', 'temp': '19℃/7℃', 'wind': '南风 <3级'}, {'date': '23日（周二）', 'type': '晴', 'temp': '19℃/5℃', 'wind': '西风 <3级'}]}
        >>> w.today()
        '北京：23日（今天）晴15℃西南风 3-4级'
        >>> w.tomorrow(True)
@@ -84,6 +84,9 @@ TODO
 -----
 - add server deployment: systemd and docker
 
+Design
+-------
+`RESETful API Specification <https://github.com/godruoyi/restful-api-specification>`_
 
 License
 -------

@@ -63,10 +63,10 @@ class RequireApi:
                 v = (True, None)
             elif data and data[0][0] <= 0:
                 # exceed
-                v = (False, {"status": "error", "message": CODE.get(7)})
+                v = (False, {"code": 429001, "message": CODE[429001], "error": CODE[429001]})
             else:
                 # invalid key provided
-                v = (False, {"status": "error", "message": CODE.get(6)})
+                v = (False, {"code": 401001, "message": CODE[401001], "error": CODE[401001]})
 
         return v
 
@@ -106,7 +106,7 @@ class TestCache:
             return json.loads(self.r.get(city))
 
     def update(self, city, weather):
-        if weather.get('data'):
+        if weather.get('code') is None:
             self.r.set(city, json.dumps(weather, ensure_ascii=False), ex=self.__timeout)
 
     @staticmethod

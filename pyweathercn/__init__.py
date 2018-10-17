@@ -61,10 +61,10 @@ class Weather:
         :param day: day option. Default is 0 which will return today's weather information.
         :return: json response
         """
-        if raw and self.data['status'] == 'success':
-            return self.data['data']['forecast'][day]
-        elif self.data['status'] == 'success':
-            return self.data['data']['city'] + '：' + self.__make_str(self.data['data']['forecast'][day])
+        if raw and self.data.get('code') is None:
+            return self.data['forecast'][day]
+        elif self.data.get('code') is None:
+            return self.data['city'] + '：' + self.__make_str(self.data['forecast'][day])
         else:
             return self.data['message']
 
@@ -76,11 +76,11 @@ class Weather:
         :param text: default tooltip
         :return: json response.
         """
-        if raw and self.data['status'] == 'success':
-            return self.data['data'][_type]
+        if raw and self.data.get('code') is None:
+            return self.data[_type]
 
-        elif self.data['status'] == 'success':
-            return self.data['data']['city'] + text + "：" + self.data['data'][_type]
+        elif self.data.get('code') is None:
+            return self.data['city'] + text + "：" + self.data[_type]
         else:
             return self.data['message']
 
@@ -91,10 +91,10 @@ class Weather:
         :param index: index for forecast function.
         :return: response.
         """
-        if raw and self.data['status'] == 'success':
-            return self.data['data']['forecast'][index]
-        elif self.data['status'] == 'success':
-            return self.data['data']['city'] + '：' + self.__make_str(self.data['data']['forecast'][index])
+        if raw and self.data.get('code') is None:
+            return self.data['forecast'][index]
+        elif self.data.get('code') is None:
+            return self.data['city'] + '：' + self.__make_str(self.data['forecast'][index])
         else:
             return self.data['message']
 

@@ -103,29 +103,26 @@ def make_json(city):
     :param city: city name
     :return: json result
     """
-    if city == 4:
-        return {"status": "error", "message": CODE[4]}
-
     city_code = convert_city(city)
     # city not found
     if city_code is None:
-        return {"status": "error", "message": CODE[1]}
+        return {"code": 400001, "message": CODE[400001], "error": CODE[400001]}
 
     try:
         url = 'http://www.weather.com.cn/weather/%s.shtml'
         response = requests.get(url % city_code)
         if response.status_code != 200:
-            return {"status": "fail", "message": CODE[100]}
+            return {"code": 500001, "message": CODE[500001], "error": "Not receiving 200 from weather.com.cn"}
 
         response.encoding = 'utf-8'
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        sample = {"data": {"city": city, "aqi": js_hour_aqi(soup), "tip": today_tip(soup), "temp": js_hour_temp(soup),
-                           "forecast": seven_day(soup)}, "status": "success", "message": CODE[0]}
+        sample = {"city": city, "aqi": js_hour_aqi(soup), "tip": today_tip(soup), "temp": js_hour_temp(soup),
+                  "forecast": seven_day(soup)}
         response.close()
         return sample
     except Exception as e:
-        sample = {"data": {}, "status": "fail", "message": e.args[0].reason.args[0]}
+        sample = {"code": 500002, "message": CODE[500002], "error": str(e)}
         return sample
 
 

@@ -2583,20 +2583,24 @@ CITY = {
     "红安": "101200502"
 }
 
-CODE = {0: 'success',
-        1: 'city not found',
-        2: 'unknown error',
-        3: 'permission denied',
-        4: 'city param error',
-        5: 'day out of range',
-        6: 'A valid key is required to access this API',
-        7: 'You have exceeded your request limit!',
-        100: 'craw denied'}
+CODE = {200001: 'success',
+        400001: 'city not found.',
+        400002: 'city param error',
+        400003: 'day out of range',
+        401001: 'A valid key is required to access this API',
+        429001: 'You have exceeded your request limit!',
+        500001: 'craw denied',
+        500002: 'Unknown error'}
 
 HTTP = {
-    'error': 400,
-    'fail': 500,
-    'success': 200
+    None: 200,
+    400001: 400,
+    400002: 400,
+    400003: 400,
+    401001: 401,
+    429001: 429,
+    500001: 503,
+    500002: 500
 }
 
 BANNER = rf'''
