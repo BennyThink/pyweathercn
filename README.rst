@@ -80,9 +80,19 @@ Please refer to ``sample.sqlite`` for database format. In this sample:
 
 You only need to add a parameter called ``key`` for your request.
 
+About cURL
+----------
+If you're using cURL on Windows(such as ``git bash``, ``MinGW``), you may receive an HTTP 400.
+
+This is because cURL will try to encode query parameters by GBK instead of UTF-8.
+This might be an implementation bug on Windows, I'm looking on it.
+
+For now the best thing you should do is use url-encode for all your city name.
+
 TODO
 -----
 - add server deployment: systemd and docker
+- cURL compatibility
 
 Design
 -------
