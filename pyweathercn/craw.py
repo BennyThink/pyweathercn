@@ -28,7 +28,7 @@ def today_tip(soup):
 
 def js_hour_aqi(soup):
     script = soup.find_all('script')
-    js = script[4].string
+    js = script[5].string
     od = json.loads(js[js.index('=') + 2:js.index(';')])
     aqi = [i['od28'] for i in od['od']['od2'] if i['od21'] == time.strftime('%H', time.localtime(3))][0]
     return aqi
@@ -41,7 +41,7 @@ def js_hour_temp(soup):
     :return:temperature
     """
     script = soup.find_all('script')
-    js = script[2].string
+    js = script[3].string
     od = json.loads(js[js.index('=') + 1:])
 
     hour = int(time.strftime('%H', time.localtime()))

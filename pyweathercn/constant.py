@@ -2590,7 +2590,7 @@ CODE = {200001: 'success',
         401001: 'A valid key is required to access this API',
         429001: 'You have exceeded your request limit!',
         500001: 'craw denied',
-        500002: 'Unknown error'}
+        500002: 'Unknown error. Please contact @BennyThink via Telegram.'}
 
 HTTP = {
     None: 200,
