@@ -45,6 +45,15 @@ class IndexHandler(BaseHandler):
         self.get()
 
 
+def compatible_get_arguments(self):
+    from tornado.web import HTTPError
+    try:
+        c = self.get_argument('city', None)
+    except HTTPError:
+        c = self.request.query_arguments['city'][0].decode('gbk')
+    return c
+
+
 class WeatherHandler(BaseHandler):
     executor = ThreadPoolExecutor(max_workers=20)
 
@@ -60,7 +69,7 @@ class WeatherHandler(BaseHandler):
             city = data.get('city')
             day = data.get('day')
         else:
-            city = self.get_argument('city', None)
+            city = compatible_get_arguments(self)
             day = self.get_argument('day', None)
         # mandatory param missing
         if city is None:
