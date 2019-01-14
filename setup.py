@@ -72,5 +72,5 @@ setup(
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy'
     ],
-
+    data_files=['README.rst']
 )
