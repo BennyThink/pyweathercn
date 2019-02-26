@@ -106,12 +106,13 @@ class Weather:
         return s
 
 
-def server(port=8888, host="0.0.0.0", auth=None, **kwargs):
+def server(port=8888, host="0.0.0.0", auth=None, provider=None, **kwargs):
     """
     run RESTAPI server.
     :param port: the port to listen on. Default is 8888
     :param host: the host to listen on. Default is localhost.
     :param auth: API authentication database path
+    :param provider: which provider to use, meizu or weathercn
     :param kwargs: any keyword argument support by tornado. example for SSL:
     ```ssl_options={
         "certfile": "fullchain.pem",
@@ -122,5 +123,6 @@ def server(port=8888, host="0.0.0.0", auth=None, **kwargs):
     if auth is not None and not os.path.isfile(auth):
         raise FileNotFoundError('Database file not exists!')
     else:
+        pyweathercn.web.PROVIDER = provider
         pyweathercn.utils.DB = auth
         pyweathercn.web.RunServer.run_server(port, host, **kwargs)

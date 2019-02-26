@@ -127,7 +127,7 @@ def cache(timeout):
                 t = TestCache(timeout)
                 valid = t.retrieve(args[0])
                 if valid:
-                    logging.info('Retrieving info from redis')
+                    logging.info('Retrieving data from redis')
                     return valid
                 else:
                     logging.info('Cache expired. Re-requesting now...')

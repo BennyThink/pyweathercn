@@ -14,9 +14,14 @@ from platform import uname
 from concurrent.futures import ThreadPoolExecutor
 from tornado import web, ioloop, httpserver, gen
 from tornado.concurrent import run_on_executor
-from pyweathercn.craw import make_json
 from pyweathercn.utils import api
 from pyweathercn.constant import CODE, BANNER, HTTP
+
+PROVIDER = None
+if PROVIDER == 'meizu':
+    from pyweathercn.meizu import make_json
+else:
+    from pyweathercn.craw import make_json
 
 
 class BaseHandler(web.RequestHandler):
@@ -90,21 +95,32 @@ class WeatherHandler(BaseHandler):
             response = make_json(city)
         # set http code and response
         self.set_status(HTTP.get(response.get('code'), 418))
-        return json.dumps(response)
+        return response
 
     @api
     @gen.coroutine
     def get(self):
-        self.set_header("Content-Type", "application/json")
         res = yield self.run_request()
         self.write(res)
 
     @api
     @gen.coroutine
     def post(self):
-        self.set_header("Content-Type", "application/json")
         res = yield self.run_request()
         self.write(res)
+
+
+class NotFoundHandler(BaseHandler):
+    def prepare(self):  # for all methods
+        self.set_status(HTTP[404001])
+        response = {"code": 404001, "message": CODE[404001], "error": CODE[404001]}
+        self.write(response)
+
+    def get(self):
+        pass
+
+    def post(self):
+        pass
 
 
 def get_host_ip():
@@ -117,7 +133,7 @@ def get_host_ip():
 
 class RunServer:
     handlers = [(r'/weather', WeatherHandler), (r'/', IndexHandler)]
-    application = web.Application(handlers)
+    application = web.Application(handlers, default_handler_class=NotFoundHandler)
 
     @staticmethod
     def run_server(port=8888, host='0.0.0.0', **kwargs):

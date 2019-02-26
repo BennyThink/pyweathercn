@@ -96,12 +96,12 @@ def convert_city(name):
     return CITY.get(name)
 
 
-@cache(timeout=3600)
+@cache(timeout=10800)
 def make_json(city):
     """
     make final request json
     :param city: city name
-    :return: json result
+    :return: result dict
     """
     city_code = convert_city(city)
     # city not found

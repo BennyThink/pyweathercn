@@ -2588,6 +2588,7 @@ CODE = {200001: 'success',
         400002: 'city param error',
         400003: 'day out of range',
         401001: 'A valid key is required to access this API',
+        404001: 'The url you requested is invalid',
         429001: 'You have exceeded your request limit!',
         500001: 'craw denied',
         500002: 'Unknown error. Please contact @BennyThink via Telegram.'}
@@ -2598,6 +2599,7 @@ HTTP = {
     400002: 400,
     400003: 400,
     401001: 401,
+    404001: 404,
     429001: 429,
     500001: 503,
     500002: 500
