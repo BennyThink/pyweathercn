@@ -1,3 +1,5 @@
+2019-03-25 version 1.0.5
+    Change default server provider to meizu
 2018-08-19 version 0.1.4
     Add API key authentication
 2018-08-18 version 0.1.3

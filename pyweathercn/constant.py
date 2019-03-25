@@ -9,6 +9,8 @@ __author__ = "Benny <benny@bennythink.com>"
 
 from pyweathercn.__version__ import __version__
 
+PROVIDER = None
+
 CITY = {
     "岳西": "101220608",
     "海拉尔": "101081001",

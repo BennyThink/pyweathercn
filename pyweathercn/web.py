@@ -17,12 +17,6 @@ from tornado.concurrent import run_on_executor
 from pyweathercn.utils import api
 from pyweathercn.constant import CODE, BANNER, HTTP
 
-PROVIDER = None
-if PROVIDER == 'meizu':
-    from pyweathercn.meizu import make_json
-else:
-    from pyweathercn.craw import make_json
-
 
 class BaseHandler(web.RequestHandler):
     def data_received(self, chunk):
@@ -61,6 +55,7 @@ def compatible_get_arguments(self):
 
 class WeatherHandler(BaseHandler):
     executor = ThreadPoolExecutor(max_workers=20)
+    PROVIDER = None
 
     @run_on_executor
     def run_request(self):
@@ -69,6 +64,11 @@ class WeatherHandler(BaseHandler):
         :return: hex and raw request in XML
         """
         # get parameter, compatibility with json
+        if WeatherHandler.PROVIDER == 'meizu':
+            from pyweathercn.meizu import make_json
+        else:
+            from pyweathercn.craw import make_json
+
         if self.request.headers.get('Content-Type') == 'application/json' and self.request.body:
             data = json.loads(self.request.body)
             city = data.get('city')
@@ -148,6 +148,7 @@ class RunServer:
         try:
             print(BANNER)
             print(f'Server is running on http://{get_host_ip()}:{port}')
+            print(f'Running server with {WeatherHandler.PROVIDER or "weather.com.cn"}')
             ioloop.IOLoop.instance().current().start()
         except KeyboardInterrupt:
             ioloop.IOLoop.instance().stop()
@@ -157,4 +158,5 @@ class RunServer:
 if __name__ == "__main__":
     # import pyweathercn.utils
     # pyweathercn.utils.DB = r'C:\Users\Benny\PycharmProjects\pyweathercn\sample.sqlite'
+    WeatherHandler.PROVIDER = 'meizu'
     RunServer.run_server()

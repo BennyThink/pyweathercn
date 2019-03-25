@@ -12,6 +12,8 @@ import os
 import pyweathercn.web
 import pyweathercn.utils
 
+from pyweathercn.craw import make_json
+
 
 class Weather:
     """
@@ -23,7 +25,7 @@ class Weather:
     """
 
     def __init__(self, city_name):
-        self.data = pyweathercn.web.make_json(city_name)
+        self.data = make_json(city_name)
 
     def __del__(self):
         del self.data
@@ -106,7 +108,7 @@ class Weather:
         return s
 
 
-def server(port=8888, host="0.0.0.0", auth=None, provider=None, **kwargs):
+def server(port=8888, host="0.0.0.0", auth=None, provider='meizu', **kwargs):
     """
     run RESTAPI server.
     :param port: the port to listen on. Default is 8888
@@ -123,6 +125,6 @@ def server(port=8888, host="0.0.0.0", auth=None, provider=None, **kwargs):
     if auth is not None and not os.path.isfile(auth):
         raise FileNotFoundError('Database file not exists!')
     else:
-        pyweathercn.web.PROVIDER = provider
+        pyweathercn.web.WeatherHandler.PROVIDER = provider
         pyweathercn.utils.DB = auth
         pyweathercn.web.RunServer.run_server(port, host, **kwargs)
