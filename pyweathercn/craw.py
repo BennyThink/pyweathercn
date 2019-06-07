@@ -8,7 +8,9 @@
 __author__ = 'Benny <benny@bennythink.com>'
 
 import json
+import logging
 import time
+import traceback
 
 import requests
 from bs4 import BeautifulSoup
@@ -41,7 +43,12 @@ def js_hour_temp(soup):
     :return:temperature
     """
     script = soup.find_all('script')
-    js = script[3].string
+    js = None
+    for item in script:
+        if item.string:
+            js = item.string
+            break
+    # js = script[2].string
     od = json.loads(js[js.index('=') + 1:])
 
     hour = int(time.strftime('%H', time.localtime()))
@@ -121,8 +128,9 @@ def make_json(city):
                   "forecast": seven_day(soup)}
         response.close()
         return sample
-    except Exception as e:
-        sample = {"code": 500002, "message": CODE[500002], "error": str(e)}
+    except Exception:
+        logging.error(traceback.format_exc())
+        sample = {"code": 500002, "message": CODE[500002], "error": traceback.format_exc()}
         return sample
 
 
