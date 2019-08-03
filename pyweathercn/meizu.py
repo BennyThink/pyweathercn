@@ -7,27 +7,31 @@ __author__ = 'Benny <benny@bennythink.com>'
 import requests
 
 from pyweathercn.utils import cache
-from pyweathercn.constant import CITY
+from pyweathercn.constant import CITY, CODE
 
 
 @cache(timeout=10800)
 def make_json(city):
     city_code = CITY.get(city)
-    url = f'http://aider.meizu.com/app/weather/listWeather?cityIds={city_code}'
+    # city not found
+    if city_code is None:
+        return {"code": 400001, "message": CODE[400001], "error": CODE[400001]}
+
+    url = 'http://aider.meizu.com/app/weather/listWeather?cityIds={}'.format(city_code)
     sample = requests.get(url).json()
     tip, forecast, result = '', [], {}
 
     for each in sample['value'][0]['indexes']:
-        tip = tip + f'{each["name"]}：{each["content"]}\n'
+        tip = tip + '{}：{}\n'.format(each["name"], each["content"])
 
-    aqi = f"{sample['value'][0]['pm25']['aqi']} {sample['value'][0]['pm25']['quality']}"
+    aqi = "{} {}".format(sample['value'][0]['pm25']['aqi'], sample['value'][0]['pm25']['quality'])
 
     temp = sample['value'][0]['realtime']['temp']
 
     for item in sample['value'][0]['weathers']:
-        date = f"{item['date']} {item['week']}"
+        date = "{} {}".format(item['date'], item['week'])
         _type = item['weather']
-        temp = f'{item["temp_day_c"]}/{item["temp_night_c"]}℃'
+        temp = '{}/{}℃'.format(item["temp_day_c"], item["temp_night_c"])
         sun_rise = item["sun_rise_time"]
         sun_down = item["sun_down_time"]
         forecast.append(dict(date=date, type=_type, temp=temp, sun_rise=sun_rise, sun_down=sun_down, wind=''))
@@ -37,7 +41,7 @@ def make_json(city):
     result['tip'] = tip
     result['temp'] = temp
     result['forecast'] = forecast
-    result['wind'] = f"{sample['value'][0]['realtime']['wD']} {sample['value'][0]['realtime']['wS']}"
+    result['wind'] = "{} {}".format(sample['value'][0]['realtime']['wD'], sample['value'][0]['realtime']['wS'])
 
     return result
 

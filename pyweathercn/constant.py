@@ -2607,14 +2607,14 @@ HTTP = {
     500002: 500
 }
 
-BANNER = rf'''
+BANNER = r'''
 
 ._           _   _. _|_ |_   _  ._ _ ._
 |_) \/ \/\/ (/_ (_|  |_ | | (/_ | (_ | |
 |   /
 
-A weather forecast library, version {__version__}
+A weather forecast library, version {}
 
-Written by {__author__}
+Written by {}
 GitHub: https://github.com/BennyThink/pyweathercn
-'''
+'''.format(__version__, __author__)

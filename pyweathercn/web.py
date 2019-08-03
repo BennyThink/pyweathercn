@@ -36,8 +36,8 @@ class IndexHandler(BaseHandler):
          with url-encoded form as above. Post JSON is also supported.
         '''.replace('\n', '<br>')
 
-        base = f'''<!DOCTYPE html><html><head><title>Welcome to pyweathercn!</title></head>
-                <body><pre>{BANNER}</pre><br>{help_msg}</body></html>'''
+        base = '''<!DOCTYPE html><html><head><title>Welcome to pyweathercn!</title></head>
+                <body><pre>{}</pre><br>{}</body></html>'''.format(BANNER, help_msg)
         self.write(base)
 
     def post(self):
@@ -147,8 +147,8 @@ class RunServer:
 
         try:
             print(BANNER)
-            print(f'Server is running on http://{get_host_ip()}:{port}')
-            print(f'Running server with {WeatherHandler.PROVIDER or "weather.com.cn"}')
+            print('Server is running on http://{}:{}'.format(get_host_ip(), port))
+            print('Running server with {}'.format(WeatherHandler.PROVIDER or "weather.com.cn"))
             ioloop.IOLoop.instance().current().start()
         except KeyboardInterrupt:
             ioloop.IOLoop.instance().stop()

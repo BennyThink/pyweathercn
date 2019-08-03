@@ -87,18 +87,7 @@ class Weather:
             return self.data['message']
 
     def __return_result(self, raw, index):
-        """
-        today, tomorrow, two_days, three_days.
-        :param raw: set True to return raw json, otherwise it shall return plain string.
-        :param index: index for forecast function.
-        :return: response.
-        """
-        if raw and self.data.get('code') is None:
-            return self.data['forecast'][index]
-        elif self.data.get('code') is None:
-            return self.data['city'] + '：' + self.__make_str(self.data['forecast'][index])
-        else:
-            return self.data['message']
+        return self.forecast(raw, index)
 
     @staticmethod
     def __make_str(dic):
