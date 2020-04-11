@@ -12,7 +12,8 @@ import os
 import pyweathercn.web
 import pyweathercn.utils
 
-from pyweathercn.craw import make_json
+from pyweathercn.craw import make_json as cn_make_json
+from pyweathercn.meizu import make_json as mz_make_json
 
 
 class Weather:
@@ -24,8 +25,11 @@ class Weather:
                             w.data```
     """
 
-    def __init__(self, city_name):
-        self.data = make_json(city_name)
+    def __init__(self, city_name, provider='meizu'):
+        if provider == 'meizu':
+            self.data = mz_make_json(city_name)
+        else:
+            self.data = cn_make_json(city_name)
 
     def __del__(self):
         del self.data
